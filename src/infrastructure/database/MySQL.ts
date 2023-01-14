@@ -1,8 +1,8 @@
-import User from '../entity/User';
-import Email from '../valueobject/Email';
-import Name from '../valueobject/Name';
-import Password from '../valueobject/Password';
-import Repository from './Repository';
+import User from '../../entity/User';
+import Email from '../../valueobject/Email';
+import Name from '../../valueobject/Name';
+import Password from '../../valueobject/Password';
+import Repository from '../../repository/Repository';
 import { Connection, MysqlError } from 'mysql';
 
 export default class MySQL implements Repository {

@@ -8,7 +8,7 @@ import Password from '../../valueobject/Password';
 import Name from '../../valueobject/Name';
 import User from '../../entity/User';
 import jwt from 'jsonwebtoken';
-import JSON from '../../factory/JSON';
+import JSON from './JSON';
 import Middleware from './Middleware';
 
 export default (repository: Repository): Router => {
@@ -34,6 +34,8 @@ export default (repository: Repository): Router => {
 
       try {
         let user: User = await repository.get(email);
+
+        console.log('HERE:', user, req.body.password);
 
         if (user.password.verify(req.body.password)) {
           res.status(200).json({

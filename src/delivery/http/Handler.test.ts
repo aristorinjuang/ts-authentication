@@ -1,6 +1,4 @@
 import Repository from '../../repository/Repository';
-import ResolvedRepositoryMock from '../../repository/ResolvedRepositoryMock';
-import RejectedRepositoryMock from '../../repository/RejectedRepositoryMock';
 import express, { Express, Router as ExpressRouter } from 'express';
 import Router from './Router';
 import Handler from './Handler';
@@ -8,10 +6,24 @@ import request from 'supertest';
 import jwt from 'jsonwebtoken';
 import sinon from 'sinon';
 import Middleware from './Middleware';
+import User from '../../entity/User';
+import Email from '../../valueobject/Email';
+import Name from '../../valueobject/Name';
+import Password from '../../valueobject/Password';
 
 describe('HTTP handler', () => {
   describe('resolved handler', () => {
-    const repository: Repository = new ResolvedRepositoryMock();
+    const password: Password = new Password('$2b$10$WCZ6j4PLICecyCYvBvL7We')
+    password.hash = 'password'
+  
+    const repository: Repository = {
+      get: jest.fn().mockReturnValue(new User(
+        new Email('test@example.com'),
+        new Name('John', 'Doe'),
+        password,
+      )),
+      create: jest.fn().mockResolvedValueOnce(() => Promise.resolve()),
+    };
     const router: ExpressRouter = Router(Handler(repository));
     const app: Express = express();
 
@@ -75,7 +87,7 @@ describe('HTTP handler', () => {
       expect(res.body.status).toBe('error');
       expect(res.body.message).toBeDefined();
     })
-  
+
     test('POST /login 404', async () => {
       const data = {
         email: 'test@example.com',
@@ -136,7 +148,10 @@ describe('HTTP handler', () => {
   })
 
   describe('rejected handler', () => {
-    const repository: Repository = new RejectedRepositoryMock();
+    const repository: Repository = {
+      get: jest.fn().mockRejectedValueOnce(() => Promise.reject(new Error('failed to get a user'))),
+      create: jest.fn().mockRejectedValueOnce(() => Promise.reject(new Error('failed to create a user'))),
+    };
     const router: ExpressRouter = Router(Handler(repository));
     const app: Express = express();
 

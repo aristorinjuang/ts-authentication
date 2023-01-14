@@ -1,13 +1,4 @@
-import User from '../entity/User';
-
-type user = {
-  email: string;
-  name: {
-    first: string;
-    last: string;
-    full: string;
-  }
-}
+import User from '../../entity/User';
 
 export default class JSON {
   public static user = (user: User) => {

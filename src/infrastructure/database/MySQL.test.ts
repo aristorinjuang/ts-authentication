@@ -1,11 +1,11 @@
 import mysql, { Connection } from 'mysql';
 import sinon, { SinonMock } from 'sinon';
-import Repository from './Repository';
+import Repository from '../../repository/Repository';
 import MySQL from './MySQL';
-import User from '../entity/User';
-import Email from '../valueobject/Email';
-import Name from '../valueobject/Name';
-import Password from '../valueobject/Password';
+import User from '../../entity/User';
+import Email from '../../valueobject/Email';
+import Name from '../../valueobject/Name';
+import Password from '../../valueobject/Password';
 
 describe('user MySQL repository', () => {
   let connection: Connection = mysql.createConnection({host: 'localhost'});
